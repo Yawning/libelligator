@@ -15,6 +15,8 @@
 
 namespace elligator {
 
+void* (*volatile memset_volatile)(void *, int, size_t) = std::memset;
+
 static const FieldElement A = {{
   486662, 0, 0, 0, 0, 0, 0, 0, 0, 0
 }};
@@ -183,6 +185,7 @@ bool ScalarBaseMult(PublicKey& publicKey,
 
   ge_p3 AA;           /* var A edwards25519.ExtendedGroupElement */
   ge_scalarmult_base(&AA, maskedPrivateKey); /* edwards25519.GeScalarMultBase(&A, &maskedPrivateKey) */
+  memset_volatile(maskedPrivateKey, 0, sizeof(maskedPrivateKey));
 
   FieldElement inv1;
   inv1.sub(AA.Z, AA.Y); /* edwards25519.FeSub(&inv1, &A.Z, &A.Y) */

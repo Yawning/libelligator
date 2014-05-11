@@ -6,6 +6,9 @@
 
 namespace elligator {
 
+// Yawning/Defined in elligator.cc
+extern void* (*volatile memset_volatile)(void *, int, size_t);
+
 static unsigned char equal(signed char b,signed char c)
 {
   unsigned char ub = b;
@@ -107,6 +110,9 @@ void ge_scalarmult_base(ge_p3 *h,const unsigned char *a)
     select(&t,i / 2,e[i]);
     ge_madd(&r,h,&t); ge_p1p1_to_p3(h,&r);
   }
+
+  // Yawning/Scrub intermediary values off the stack.
+  memset_volatile(e, 0, sizeof(e));
 }
 
 } // namespace elligator
