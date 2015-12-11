@@ -282,6 +282,13 @@ bool ScalarBaseMult(PublicKey& publicKey,
   unsigned int vInSquareRootImage = feBytesLE(vBytes, halfQMinus1Bytes); /* vInSquareRootImage := feBytesLE(&vBytes, &halfQMinus1Bytes) */
   r.cmov(r1, vInSquareRootImage); /* edwards25519.FeCMove(&r, &r1, vInSquareRootImage) */
 
+  /* 5.5: Here |b| means b if b in {0, 1, ..., (q - 1)/2}, otherwise -b. */
+  uint8_t rBytes[32];
+  r.toBytes(rBytes);
+  unsigned int negateB = (1 & ~feBytesLE(rBytes, halfQMinus1Bytes));
+  r1.neg(r);
+  r.cmov(r1, negateB);
+
   u.toBytes(publicKey); /* edwards25519.FeToBytes(publicKey, &u) */
   r.toBytes(representative);  /* edwards25519.FeToBytes(representative, &r) */
   return true;

@@ -22,7 +22,7 @@ import (
 func encodeToCharLiteral(buf []byte) string {
 	s := ""
 	for i := 0; i < len(buf); i++ {
-		s += fmt.Sprintf("0x%x, ", buf[i])
+		s += fmt.Sprintf("0x%02x, ", buf[i])
 	}
    return s
 }
@@ -37,7 +37,7 @@ func main() {
 	fmt.Printf("};\n")
 	fmt.Printf("\n")
     fmt.Printf("const TestVectors vectors[] = {\n")
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 20; i++ {
 		var pub, repr, priv [32]byte
 		_, err := rand.Read(priv[:])
 		if err != nil {

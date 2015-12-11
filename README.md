@@ -16,11 +16,27 @@ C++ was chosen over C primarily because it can be a nicer language, and
 polluting the global namespace with all the code taken from SUPERCOP is
 extremely rude.
 
-There is no warranty.  As far as I can tell the output matches agl's
-implementation, but I may have done something wrong.
+There is no warranty.  agl's implementation doesn't use the correct square
+root some of the time, leading to incorrect representative generation.  This
+bug is fixed.
 
 If [Google C++ Testing Framework](https://code.google.com/p/googletest/) is
 installed on your system "make test" will compile a simple Known Answer Test.
+
+It is the caller's responsibility to randomize the 2 high bits of the
+representative, and to mask out said randomness before converting back from
+the representative to the public key.
+
+This will look something like:
+
+        // Assuming `repr` holds the representative from ScalarBaseMult...
+        uint8_t bits;
+        random_bytes(&bits, 1);
+        repr[31] |= bits & 0xc0;
+
+        // ... on the other side, mask out the 2 bits, then reverse the map.
+        repr[31] &= ~ 0xc0;
+        RepresentativeToPublicKey(pub, repr);
 
 ### TODO
 
