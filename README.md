@@ -38,6 +38,9 @@ This will look something like:
         repr[31] &= ~ 0xc0;
         RepresentativeToPublicKey(pub, repr);
 
+If you already pull in Andrew Moon's ed25519-donna, then you should probably
+use https://gist.github.com/Yawning/0181098c1119f49b3eb2 instead.
+
 ### TODO
 
  * Someone should use [ctgrind](https://github.com/agl/ctgrind) to make sure
